@@ -2080,7 +2080,7 @@
         }
 
         function loadServiceConfig() {
-            fetch('https://xeroxproject-backend-production.up.railway.app/service-config')
+            fetch('https://xeroxproject-backend-production.up.railway.app/service-config', { credentials: 'include' })
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('service-active-toggle').checked = data.isActive;
@@ -2113,7 +2113,7 @@
 
         // --- Redeem Options Logic ---
         function loadRedeemOptions() {
-            fetch('https://xeroxproject-backend-production.up.railway.app/admin/redeem-options')
+            fetch('https://xeroxproject-backend-production.up.railway.app/admin/redeem-options', { credentials: 'include' })
                 .then(res => res.json())
                 .then(data => {
                     const container = document.getElementById('admin-redeem-container');
@@ -2232,6 +2232,7 @@
 
             fetch('https://xeroxproject-backend-production.up.railway.app/service-config', {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ isActive: String(isActive), message: message })
             })
@@ -2293,7 +2294,7 @@
         window.allUsersData = [];
 
         function loadAdminUsers() {
-            fetch('https://xeroxproject-backend-production.up.railway.app/getAllUsers')
+            fetch('https://xeroxproject-backend-production.up.railway.app/getAllUsers', { credentials: 'include' })
                 .then(res => {
                     if (!res.ok) throw new Error("Unauthorized fetching users");
                     return res.json();
@@ -2389,7 +2390,7 @@
             document.getElementById('modal-ud-revenue').textContent = "-";
             document.getElementById('modal-ud-tbody').innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">Fetching insights...</td></tr>';
 
-            fetch('https://xeroxproject-backend-production.up.railway.app/getUserDetails?userId=' + userId)
+            fetch('https://xeroxproject-backend-production.up.railway.app/getUserDetails?userId=' + userId, { credentials: 'include' })
                 .then(res => res.json())
                 .then(data => {
                     if (data.error) {
@@ -2499,7 +2500,7 @@
         window.currentManagingOrderId = null;
 
         function loadAdminOrders() {
-            fetch('https://xeroxproject-backend-production.up.railway.app/get-all-orders')
+            fetch('https://xeroxproject-backend-production.up.railway.app/get-all-orders', { credentials: 'include' })
                 .then(res => {
                     if (!res.ok) throw new Error("Unauthorized fetching orders");
                     return res.json();
@@ -2771,6 +2772,7 @@
 
             fetch('https://xeroxproject-backend-production.up.railway.app/update-order-status', {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     orderId: window.currentManagingOrderId,
@@ -2802,7 +2804,7 @@
         window.currentManagingTicketId = null;
 
         function loadAdminTickets() {
-            fetch('https://xeroxproject-backend-production.up.railway.app/get-admin-tickets')
+            fetch('https://xeroxproject-backend-production.up.railway.app/get-admin-tickets', { credentials: 'include' })
                 .then(res => res.json())
                 .then(data => {
                     if (data.tickets) {
@@ -2941,6 +2943,7 @@
 
             fetch('https://xeroxproject-backend-production.up.railway.app/update-ticket', {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             })
@@ -2966,7 +2969,7 @@
 
         // --- Admin Dashboard Stats Fetch Logic ---
         function loadAdminStats() {
-            fetch('https://xeroxproject-backend-production.up.railway.app/admin-stats')
+            fetch('https://xeroxproject-backend-production.up.railway.app/admin-stats', { credentials: 'include' })
                 .then(res => {
                     if (!res.ok) throw new Error("Unauthorized or Invalid Admin session");
                     return res.json();
