@@ -2242,6 +2242,8 @@
                     if (data.success) {
                         statusDiv.style.color = '#2ecc71';
                         statusDiv.innerText = 'Configuration Saved Successfully!';
+                        // Reload service config to show updated values
+                        loadServiceConfig();
                     } else {
                         statusDiv.style.color = '#e74c3c';
                         statusDiv.innerText = data.error || 'Failed to save configuration.';
