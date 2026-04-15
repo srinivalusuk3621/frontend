@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Use Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: url('mountain_bg.png') no-repeat center bottom fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #000;
+        }
+
+        /* Modern Header & Navigation */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px 60px;
+            box-sizing: border-box;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        .hamburger {
+            display: none;
+            background: transparent;
+            border: none;
+            color: #000;
+            font-size: 28px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            outline: none;
+        }
+
+        .hamburger:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #000;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease, transform 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #000;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:not(.nav-login):hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        .nav-links a.nav-login {
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: transparent;
+            display: inline-block;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .nav-links a.nav-login:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-color: #fff;
+        }
+
+        /* Responsive Mobile Menu */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 30px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 250px;
+                flex-direction: column;
+                background: rgba(255, 255, 255, 0.527);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                padding: 30px 0;
+                gap: 25px;
+                border-bottom-left-radius: 15px;
+                border-left: 1px solid rgba(0, 0, 0, 0.1);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                display: none;
+                box-shadow: -5px 10px 30px rgba(0, 0, 0, 0.15);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a.nav-login {
+                color: #000;
+                border-color: rgba(0, 0, 0, 0.8);
+            }
+
+            .nav-links a.nav-login:hover {
+                background: #000;
+                color: #fff;
+            }
+        }
+
+        /* Main Center Flex Box */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Glassmorphism Card */
+        .login-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 35px 35px;
+            width: 100%;
+            max-width: 330px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-card h2 {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: #000;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #333;
+            padding: 8px 30px 8px 5px;
+            font-size: 14px;
+            color: #000;
+            box-sizing: border-box;
+            outline: none;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .input-group input::placeholder {
+            color: #222;
+            font-weight: 600;
+        }
+
+        .input-margin {
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            right: 0px;
+            bottom: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .forgot-section {
+            text-align: right;
+            margin-bottom: 15px;
+            margin-top: 5px;
+        }
+
+        .forgot-section a {
+            font-size: 11px;
+            color: #111;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .forgot-section a strong {
+            font-weight: 800;
+        }
+
+        .remember-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .remember-section label {
+            display: flex;
+            align-items: center;
+            color: #111;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .remember-section input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+            position: relative;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .remember-section input[type="checkbox"]:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            font-size: 12px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #74a1cb 0%, #4b7db0 100%);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease, opacity 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .register-section {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .register-section a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 800;
+            margin-left: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .register-section a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0 15px 0;
+            color: #222;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .divider span {
+            padding: 0 10px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+            transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .social-btn i {
+            position: absolute;
+            left: 20px;
+            font-size: 18px;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .google-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .facebook-btn {
+            background: rgba(24, 119, 242, 0.85);
+            /* Facebook blue */
+            color: #fff;
+        }
+
+        .twitter-btn {
+            background: rgba(34, 145, 214, 0.85);
+            /* Twitter light blue */
+            color: #fff;
+        }
+
+        /* Responsive Mobile Adjustments for Login Card */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 30px 25px;
+                width: 90%;
+                max-width: 350px;
+                box-sizing: border-box;
+            }
+
+            .login-card h2 {
+                font-size: 20px;
+                margin-bottom: 25px;
+            }
+
+            .input-group input {
+                font-size: 13px;
+                padding: 8px 30px 8px 5px;
+            }
+
+            .input-margin {
+                margin-bottom: 15px;
+            }
+
+            .remember-section {
+                margin-bottom: 20px;
+            }
+
+            .login-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .social-login {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 15px;
+            }
+
+            .social-btn {
+                padding: 12px 0;
+                display: flex;
+                flex: 1;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .social-btn i {
+                position: static;
+                font-size: 18px;
+            }
+
+            .social-btn span {
+                display: none;
+            }
+        }
+
+        /* Ultra-Small Screen Adjustments */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 25px 20px;
+                width: 90%;
+                max-width: 320px;
+            }
+
+            .login-card h2 {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+
+            .input-group input {
+                font-size: 12px;
+                padding: 6px 25px 6px 5px;
+            }
+
+            .input-margin {
+                margin-bottom: 12px;
+            }
+
+            .remember-section {
+                margin-bottom: 15px;
+            }
+
+            .remember-section label {
+                font-size: 12px;
+            }
+
+            .forgot-section a {
+                font-size: 10px;
+            }
+
+            .login-btn {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .social-login {
+                gap: 10px;
+            }
+
+            .social-btn {
+                padding: 10px 0;
+            }
+
+            .social-btn i {
+                font-size: 16px;
+            }
+
+            .register-section {
+                font-size: 11px;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <button class="hamburger" id="hamburger">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <nav class="nav-links" id="nav-links">
+            <a href="index.html#home">Home</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#services">Services</a>
+            <a href="index.html#contact">Contact</a>
+            <a href="login.html" class="nav-login">Login</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="login-card">
+            <h2>LOGIN</h2>
+
+            <form action="https://xeroxproject-backend-production.up.railway.app/login" method="post" id="login-form">
+                <div class="input-group input-margin">
+                    <input type="text" name="email" id="email-input" placeholder="Email" required>
+                    <i class="fa-regular fa-envelope"></i>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" name="password" id="password-input" placeholder="Password" required>
+                    <i class="fa-solid fa-eye-slash" id="toggle-password"
+                        style="cursor: pointer; transition: color 0.3s ease;" title="Show/Hide Password"></i>
+                </div>
+
+                <div class="forgot-section">
+                    <a href="forgot-password.html">Forgot <strong>Password?</strong></a>
+                </div>
+
+                <div class="remember-section">
+                    <label>
+                        <input type="checkbox" name="remember">
+                        Remember Me
+                    </label>
+                </div>
+
+                <button type="submit" class="login-btn">Login</button>
+
+                <div class="divider">
+                    <span>or</span>
+                </div>
+
+                <div class="social-login">
+                    <button type="button" class="social-btn google-btn" onclick="googleLogin()">
+                        <i class="fa-brands fa-google"></i><span> Continue with Google</span>
+                    </button>
+                    <button type="button" class="social-btn facebook-btn">
+                        <i class="fa-brands fa-facebook-f"></i><span> Continue with Facebook</span>
+                    </button>
+                    <button type="button" class="social-btn twitter-btn">
+                        <i class="fa-brands fa-twitter"></i><span> Continue with Twitter</span>
+                    </button>
+                </div>
+
+                <div class="register-section">
+                    <span>Don't have an Account?</span> <a href="register.html">Register</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = hamburger.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Password Visibility Toggle
+        const togglePassword = document.getElementById('toggle-password');
+        const passwordInput = document.getElementById('password-input');
+
+        togglePassword.addEventListener('click', function () {
+            // Toggle the type attribute
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // Toggle the eye / eye-slash icon
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBcIkltmKcWz89bz6hw3N3bvva5xApFTmk",
+            authDomain: "xerox-app-a9242.firebaseapp.com",
+            projectId: "xerox-app-a9242",
+            storageBucket: "xerox-app-a9242.firebasestorage.app",
+            messagingSenderId: "944715065368",
+            appId: "1:944715065368:web:4088994ccdccedd0a07b6d"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        window.googleLogin = function () {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    window.location.href = "dashboard.html";
+                }).catch((error) => {
+                    console.error("Login Error:", error);
+                    alert("Login failed: " + error.message);
+                });
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to XeroxHub</title>
+    <!-- Use Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(90deg, #74a1cb 0%, #4b7db0 100%);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: url('mountain_bg.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #000;
+        }
+        /* Navbar */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #000;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #000;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #000;
+            transition: width 0.3s ease;
+        }
+        .nav-links a:not(.nav-login):hover::after {
+            width: 100%;
+        }
+        .nav-links a.nav-login {
+            border: 2px solid rgba(0, 0, 0, 0.8);
+            color: #000;
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: transparent;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .nav-links a.nav-login:hover {
+            background: #000;
+            color: #fff;
+        }
+        .hamburger {
+            display: none;
+            background: transparent;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 120px 40px 60px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .section-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-desc {
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            max-width: 800px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        /* Home Page */
+        #home .hero-content {
+            text-align: center;
+            max-width: 900px;
+            margin: auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: var(--glass-shadow);
+            animation: fadeIn 1s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #home h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        #home h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .feature-badge {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        .feature-badge:hover {
+            transform: translateY(-3px);
+        }
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-family: 'Montserrat', sans-serif;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.5);
+            color: #000;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Generic Container for Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        /* About Section */
+        .team-member i {
+            font-size: 40px;
+            color: #4b7db0;
+            margin-bottom: 15px;
+        }
+        .team-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .team-role {
+            font-size: 14px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 10px;
+        }
+        .team-roll {
+            font-size: 13px;
+            font-weight: 500;
+            background: rgba(255,255,255,0.4);
+            padding: 5px 15px;
+            border-radius: 10px;
+        }
+        .mission-box {
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        .mission-box h3 { margin-top: 0; font-size: 24px; color: #74a1cb; }
+
+        /* Services Section */
+        .service-icon {
+            font-size: 40px;
+            color: #4b7db0;
+            margin-bottom: 15px;
+        }
+        .service-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .service-cost {
+            font-size: 18px;
+            font-weight: 800;
+            color: #2c5985;
+            margin-bottom: 15px;
+        }
+        .service-details {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            width: 100%;
+        }
+        .service-details li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .service-details li:last-child {
+            border-bottom: none;
+        }
+        .service-note {
+            margin-top: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 15px 30px;
+            border-radius: 10px;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            width: 100%;
+            max-width: 1000px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+            flex-direction: row;
+        }
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .contact-form {
+            flex: 1.5;
+            min-width: 300px;
+            padding: 50px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-control {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #333;
+            padding: 10px 5px;
+            font-size: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus {
+            border-bottom-color: #4b7db0;
+        }
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .contact-info h3 { margin-top: 0; font-size: 24px; color: #74a1cb; }
+        .contact-info p { line-height: 1.6; font-size: 15px; margin-bottom: 20px; }
+        .contact-info a { color: #fff; font-weight: 700; text-decoration: none; }
+        
+        /* Mobile menu */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .hamburger { display: block; }
+            .nav-links {
+                position: absolute; top: 100%; right: 0; width: 250px;
+                flex-direction: column;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                padding: 30px 0; gap: 20px;
+                border-bottom-left-radius: 15px;
+                display: none;
+                box-shadow: -5px 10px 30px rgba(0,0,0,0.1);
+            }
+            .nav-links.active { display: flex; }
+
+            /* Mobile Responsive Fixes */
+            section { padding: 100px 15px 40px; }
+            .section-title { font-size: 26px; }
+            .section-desc { font-size: 14px; margin-bottom: 30px; }
+            .grid-container { grid-template-columns: 1fr; gap: 20px; width: 100%; }
+            .card { padding: 25px 20px; }
+            
+            #home .hero-content { padding: 30px 15px; margin: 0 10px; }
+            #home h1 { font-size: 30px; margin-bottom: 10px; }
+            #home h3 { font-size: 15px; line-height: 1.4; }
+            .feature-badge { font-size: 12px; padding: 8px 12px; }
+            
+            .mission-box { padding: 25px 15px; margin-top: 30px; }
+            .mission-box h3 { font-size: 20px; }
+            .mission-box p { font-size: 15px !important; }
+
+            .cta-buttons { flex-direction: column; }
+            .contact-container { flex-direction: column; width: calc(100% - 20px); margin: 0 10px; }
+            .contact-info, .contact-form { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">XeroxHub</a>
+        <button class="hamburger" id="hamburger">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <nav class="nav-links" id="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+            <a href="login.html" class="nav-login">Login</a>
+        </nav>
+    </header>
+
+    <!-- HOME SECTION -->
+    <section id="home">
+        <div class="hero-content">
+            <h1>Welcome to XeroxHub</h1>
+            <h3>Fast, Reliable & Affordable Printing Services at Your Fingertips</h3>
+            <p class="section-desc">
+                Upload your documents, customize print settings, and get high-quality prints delivered quickly. 
+                XeroxHub simplifies your printing needs with smart tracking and easy ordering.
+            </p>
+            <div class="features">
+                <div class="feature-badge"><i class="fa-solid fa-cloud-arrow-up"></i> Easy Document Upload</div>
+                <div class="feature-badge"><i class="fa-solid fa-location-crosshairs"></i> Live Order Tracking</div>
+                <div class="feature-badge"><i class="fa-solid fa-bolt"></i> Fast Printing Service</div>
+                <div class="feature-badge"><i class="fa-solid fa-shield-halved"></i> Secure Payment System</div>
+                <div class="feature-badge"><i class="fa-solid fa-gift"></i> Reward Points System</div>
+            </div>
+            <div class="cta-buttons">
+                <a href="login.html" class="btn btn-primary">Start Printing</a>
+                <a href="login.html" class="btn btn-secondary">Upload Document</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about">
+        <h2 class="section-title">About Our Team</h2>
+        <p class="section-desc">This project is developed as part of an academic initiative to provide a smart printing solution.</p>
+        
+        <div class="grid-container" style="max-width: 1000px;">
+            <div class="card team-member">
+                <i class="fa-solid fa-code"></i>
+                <div class="team-name">P Sudharsan Reddy</div>
+                <div class="team-role">Frontend Developer</div>
+                <div class="team-roll">244G1A05CS</div>
+            </div>
+            <div class="card team-member">
+                <i class="fa-solid fa-server"></i>
+                <div class="team-name">Srinivasulu K</div>
+                <div class="team-role">Backend Developer, Deployment & Planner</div>
+                <div class="team-roll">244G1A05CP</div>
+            </div>
+            <div class="card team-member">
+                <i class="fa-solid fa-bug-slash"></i>
+                <div class="team-name">P Venkata Srinivasulu</div>
+                <div class="team-role">Testing Team</div>
+                <div class="team-roll">244G1A05DX</div>
+            </div>
+            <div class="card team-member">
+                <i class="fa-solid fa-vial-circle-check"></i>
+                <div class="team-name">Venu Gopala Krish Murthy</div>
+                <div class="team-role">Testing Team</div>
+                <div class="team-roll">244G1A05ED</div>
+            </div>
+        </div>
+
+        <div class="mission-box">
+            <h3>Our Mission</h3>
+            <p style="font-size: 18px; line-height: 1.6; font-weight: 500;">
+                "To simplify printing services by providing an easy-to-use online platform with real-time tracking and secure transactions."
+            </p>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services">
+        <h2 class="section-title">Our Printing Services</h2>
+        
+        <div class="grid-container">
+            <div class="card">
+                <i class="fa-solid fa-file-lines service-icon"></i>
+                <div class="service-title">Black & White Printing</div>
+                <div class="service-cost">₹1 per page</div>
+                <ul class="service-details">
+                    <li><i class="fa-solid fa-check" style="color: #4CAF50;"></i> High-quality clear prints</li>
+                </ul>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-palette service-icon"></i>
+                <div class="service-title">Color Printing</div>
+                <div class="service-cost">₹10 per page</div>
+                <ul class="service-details">
+                    <li><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Vibrant and sharp colors</li>
+                </ul>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-book service-icon"></i>
+                <div class="service-title">Binding Services</div>
+                <div class="service-cost">From ₹20</div>
+                <ul class="service-details">
+                    <li><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Spiral Binding: ₹20</li>
+                    <li><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Hard Binding: ₹50</li>
+                </ul>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-scroll service-icon"></i>
+                <div class="service-title">Paper Options</div>
+                <div class="service-cost">Various Types</div>
+                <ul class="service-details">
+                    <li><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Normal Paper</li>
+                    <li><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Glossy Paper (extra charges apply)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-print service-icon"></i>
+                <div class="service-title">Print Options</div>
+                <div class="service-cost">Customizable</div>
+                <ul class="service-details">
+                    <li><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Single Side / Double Side</li>
+                    <li><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Portrait / Landscape</li>
+                    <li><i class="fa-solid fa-check" style="color: #4CAF50;"></i> A4 / Custom Size</li>
+                </ul>
+            </div>
+        </div>
+        <div class="service-note">
+            <i class="fa-solid fa-circle-info"></i> Note: Prices may vary based on document size and quantity.
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact">
+        <h2 class="section-title">Contact Us</h2>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Get in Touch</h3>
+                <p>If you have any queries, issues, or support requests, feel free to contact us anytime.</p>
+                <div style="margin-top: 20px;">
+                    <i class="fa-solid fa-envelope" style="margin-right: 10px;"></i>
+                    <a href="mailto:xeroxhub3621@gmail.com">xeroxhub3621@gmail.com</a>
+                </div>
+            </div>
+            <div class="contact-form">
+                <form onsubmit="event.preventDefault(); alert('Message sent! Our support team will respond as soon as possible.');">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 8px;">Send</button>
+                    <div style="text-align: center; margin-top: 15px; font-size: 13px; color: #555;">
+                        Our support team will respond as soon as possible.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = hamburger.querySelector('i');
+            if(navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                const icon = hamburger.querySelector('i');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            });
+        });
+    </script>
+</body>
+</html>
