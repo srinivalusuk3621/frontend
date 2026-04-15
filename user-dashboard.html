@@ -2323,7 +2323,7 @@
         // --- Service Config Checks ---
         window.isServiceActive = true;
         function loadServiceStatus() {
-            fetch('https://xeroxproject-backend-production.up.railway.app/service-config')
+            fetch('https://xeroxproject-backend-production.up.railway.app/service-config', { credentials: 'include' })
                 .then(res => res.json())
                 .then(data => {
                     if(data.isActive === false) {
