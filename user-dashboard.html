@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- PDF.js for counting pages -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- Cashfree.js SDK for payment checkout -->
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
     <style>
         :root {
             --primary: #4b7db0;
@@ -1865,7 +1867,7 @@
             document.getElementById('order-modal').style.display = 'none';
         }
 
-        function processFinalOrder() {
+        async function processFinalOrder() {
             if (!selectedFile) return;
 
             let pagesVal = document.getElementById('summary-pages').textContent;
@@ -1890,7 +1892,7 @@
             let originalBtnText = "Confirm & Pay";
             if (confirmBtn) {
                 originalBtnText = confirmBtn.innerText;
-                confirmBtn.innerText = "Processing...";
+                confirmBtn.innerText = "⏳ Processing...";
                 confirmBtn.disabled = true;
             }
 
@@ -1898,29 +1900,37 @@
             formData.append("orderData", JSON.stringify(orderData));
             formData.append("file", selectedFile);
 
-            fetch('https://xeroxproject-backend-production.up.railway.app/place-order', {
-                method: 'POST',
-                credentials: 'include',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
+            try {
+                const res = await fetch('https://xeroxproject-backend-production.up.railway.app/place-order', {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: formData
+                });
+                const data = await res.json();
+
                 if (confirmBtn) {
                     confirmBtn.innerText = originalBtnText;
                     confirmBtn.disabled = false;
                 }
-                
-                if (data.payment_link) {
+
+                if (data.payment_session_id) {
+                    // ✅ CORRECT: Use Cashfree.js SDK to launch the hosted payment page
+                    // payment_session_id is NOT a URL — it must be passed to the SDK
+                    closeConfirmationModal();
+                    const cashfree = Cashfree({ mode: data.env === 'PROD' ? 'production' : 'sandbox' });
+                    cashfree.checkout({
+                        paymentSessionId: data.payment_session_id,
+                        returnUrl: 'https://xeroxhub.vercel.app/payment-success.html?order_id=' + data.cashfree_order_id
+                    });
+                } else if (data.payment_link) {
+                    // Fallback: direct payment link (if Cashfree returns one)
                     window.location.href = data.payment_link;
                 } else if (data.status === "success" || data.success) {
-                    alert('Order placed securely! (No payment link available)');
+                    // Order placed without payment (free/mock)
+                    alert('Order placed securely!');
                     closeConfirmationModal();
-                    fetchUserOrders();
-
-                    // Reset Framework explicitly
                     selectedFile = null;
                     extractedPageCount = 0;
-                    
                     if(document.getElementById('drop-zone')) document.getElementById('drop-zone').style.display = 'flex';
                     if(document.getElementById('pdf-preview-container')) document.getElementById('pdf-preview-container').style.display = 'none';
                     if(document.getElementById('file-metrics')) document.getElementById('file-metrics').style.display = 'none';
@@ -1928,28 +1938,21 @@
                     if(document.getElementById('live-price-display')) document.getElementById('live-price-display').textContent = '₹0.00';
                     if(document.getElementById('price-breakdown')) document.getElementById('price-breakdown').textContent = '0 pages x ₹1.00 x 1 copy = ₹0.00';
                     if(document.getElementById('metric-pagecount')) document.getElementById('metric-pagecount').textContent = '0';
-                    
-                    // Native mapping
                     if(typeof loadUserStats === 'function') loadUserStats();
                     if(typeof loadUserOrders === 'function') loadUserOrders();
-                    
-                    // Switch to Orders View smoothly
-                    let event = new Event('click');
                     const orderMenu = document.querySelector('.menu-item[data-view="orders-view"]');
-                    if (orderMenu) orderMenu.dispatchEvent(event);
-                    if(typeof toggleSidebar === 'function') toggleSidebar(false);
+                    if (orderMenu) orderMenu.dispatchEvent(new Event('click'));
                 } else {
                     alert('Error placing order: ' + (data.error || 'Server rejected.'));
                 }
-            })
-            .catch(err => {
+            } catch(err) {
                 if (confirmBtn) {
                     confirmBtn.innerText = originalBtnText;
                     confirmBtn.disabled = false;
                 }
                 console.error("Order Place Error: ", err);
                 alert("Connection failed while placing order.");
-            });
+            }
         }
 
         // Triggers when user redeems an option
