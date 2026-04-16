@@ -2155,7 +2155,7 @@
                     const dlBtn = document.getElementById('modal-download-btn');
                     if (dlBtn) {
                         dlBtn.onclick = function() {
-                            window.open('/xerox/download-file?fileName=' + encodeURIComponent(order.file_name), '_blank');
+                            window.open('https://xeroxproject-backend-production.up.railway.app/download-file?order_id=' + order.id, '_blank');
                         };
                     }
 
